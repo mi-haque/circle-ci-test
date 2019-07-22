@@ -1,5 +1,5 @@
 version: 2
- jobs:
+jobs:
    one:
      docker:
        - image: circleci/ruby:2.4.1
@@ -14,7 +14,7 @@ version: 2
        - checkout
        - run: echo "A more familiar hi"
        - run: sleep 15
- workflows:
+workflows:
    version: 2
    one_and_two:
      jobs:
