@@ -6,7 +6,7 @@ jobs:
      steps:
        - checkout
        - run: echo "A first hello"
-       - run: gcloud auth activate-service-account circle-ci-connect@newsuk-datatech-dev-1251.iam.gserviceaccount.com  --key-file=$DEV_PROJECT_KEY
+       - run: echo $GCLOUD_SERVICE_KEY | gcloud auth activate-service-account --key-file=-
 workflows:
    version: 2
    one_and_two:
