@@ -9,7 +9,7 @@ jobs:
        - run: echo $DEV_PROJECT_KEY | gcloud auth activate-service-account --key-file=-
        - run: gsutil ls gs://circleci_input
        - run: git clone https://github.com/mi-haque/circle-ci-test.git
-       - run: gsutil rsync -r -x ".git/*" circle-ci-test/ gs://circleci_input
+       - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
 workflows:
    version: 2
    one_and_two:
