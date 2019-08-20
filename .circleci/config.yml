@@ -15,8 +15,8 @@ jobs:
     steps:
       - checkout
       -  run:
-          name: unit tests
-          command: echo "unit testing"
+            name: unit tests
+            command: echo "unit testing"
 
   linting:
     docker:
@@ -30,13 +30,21 @@ jobs:
   integration_test:
     docker:
       - image: busybox:latest
-      steps:
-        name: integration test
-        command: echo "integration testing"
+    steps:
+      - checkout
+      - run:
+          name: integration test
+          command: echo "integration testing"
 
   deploy:
     docker:
       - image: busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: integration test
+          command: echo "integration testing"
+
 
   rsync:
     docker:
