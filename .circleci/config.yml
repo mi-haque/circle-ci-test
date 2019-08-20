@@ -12,7 +12,7 @@ jobs:
   unit_test:
     docker:
       - image: busybox:latest
-      - steps:
+      steps:
            - checkout
            -  run:
                 name: unit tests
@@ -30,6 +30,9 @@ jobs:
   integration_test:
     docker:
       - image: busybox:latest
+      steps:
+        name: integration test
+        command: echo "integration testing"
 
   deploy:
     docker:
