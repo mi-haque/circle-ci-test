@@ -36,6 +36,16 @@ jobs:
           name: integration test
           command: echo "integration testing"
 
+  build_artifacts:
+    docker:
+      - image: busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: build artifact
+          command: echo "building artifacts"
+
+
   deploy:
     docker:
       - image: busybox:latest
