@@ -70,18 +70,14 @@ workflows:
   deployment_pipeline:
 
     jobs:
-      - build
-      - unit_test:
-          requires:
-              - build
-      - linting:
-          requires:
-              - build
-      - integration_test:
-          requires:
-              - build
-      - deploy:
+      - unit_test
+      - linting
+      - integration_test
+      - build_artifacts:
           requires:
             - linting
             - unit_test
             - integration_test
+      - deploy:
+          requires:
+            - build_artifacts
