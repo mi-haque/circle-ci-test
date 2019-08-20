@@ -12,11 +12,11 @@ jobs:
   unit_test:
     docker:
       - image: busybox:latest
-      steps:
-           - checkout
-           -  run:
-                name: unit tests
-                command: echo "unit testing"
+    steps:
+      - checkout
+      -  run:
+          name: unit tests
+          command: echo "unit testing"
 
   linting:
     docker:
