@@ -1,17 +1,68 @@
 version: 2
 jobs:
-   one:
-     docker:
-       - image: google/cloud-sdk
-     steps:
-       - checkout
-       - run: echo "A first hello"
-       - run: echo $DEV_PROJECT_KEY | gcloud auth activate-service-account --key-file=-
-       - run: gsutil ls gs://circleci_input
-       - run: git clone https://github.com/mi-haque/circle-ci-test.git
-       - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
+  build:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: build repo
+          command: echo "building..."
+
+  unit_test:
+    docker:
+      - image: busybox:latest
+      - steps:
+           - checkout
+           -  run:
+                name: unit tests
+                command: echo "unit testing"
+
+  linting:
+    docker:
+      - image: busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: linting checks
+          command: echo "linting & security checks happens here"
+
+  integration_test:
+    docker:
+      - image: busybox:latest
+
+  deploy:
+    docker:
+      - image: busybox:latest
+
+  rsync:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - run: echo $DEV_PROJECT_KEY | gcloud auth activate-service-account --key-file=-
+      - run: gsutil ls gs://circleci_input
+      - run: git clone https://github.com/mi-haque/circle-ci-test.git
+      - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
+
 workflows:
-   version: 2
-   one_and_two:
-     jobs:
-       - one
+  version: 2
+  deployment_pipeline:
+
+    jobs:
+      - build
+        requires:
+            - build
+      - unit_test
+        requires:
+            - build
+      - linting
+        requires:
+            - build
+      - integration_test
+        requires:
+            - build
+      - deploy
+        requires:
+          - linting
+          - unit_test
+          - integration_test
