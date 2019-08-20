@@ -50,19 +50,19 @@ workflows:
 
     jobs:
       - build
-        requires:
-            - build
+          requires:
+              - build
       - unit_test
-        requires:
-            - build
+          requires:
+              - build
       - linting
-        requires:
-            - build
+          requires:
+              - build
       - integration_test
-        requires:
-            - build
+          requires:
+              - build
       - deploy
-        requires:
-          - linting
-          - unit_test
-          - integration_test
+          requires:
+            - linting
+            - unit_test
+            - integration_test
