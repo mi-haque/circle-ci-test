@@ -10,6 +10,10 @@ executors:
 jobs:
   build:
     executor: busy_box_executor
+    filters:
+      branches:
+        only:
+          - develop
     steps:
       - checkout
       - run:
@@ -70,9 +74,6 @@ workflows:
   version: 2
 
   deployment_pipeline:
-    branches:
-      only:
-        - develop
     jobs:
       - unit_test
       - linting
