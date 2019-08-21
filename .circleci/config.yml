@@ -8,18 +8,6 @@ version: 2
 
 
 jobs:
-  sample_job:
-    docker:
-        - image:   busybox:latest
-    filters:
-      branches:
-        only:
-          - develop
-    steps:
-      - checkout
-      - run:
-          name: build repo
-          command: echo "building..."
 
   unit_test:
     docker:
