@@ -55,7 +55,6 @@ jobs:
           name: integration test
           command: echo "integration testing"
 
-
   rsync:
     docker:
       - image: google/cloud-sdk
@@ -78,6 +77,10 @@ workflows:
             - linting
             - unit_test
             - integration_test
+      - wait_for_approval:
+          type: approval
+          requires:
+              - build_artifacts
       - deploy:
           requires:
-            - build_artifacts
+            - wait_for_approval
