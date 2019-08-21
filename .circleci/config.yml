@@ -70,7 +70,7 @@ workflows:
   version: 2
 
   deployment_pipeline:
-    filers:
+    filters:
       branches:
         only:
           - develop
