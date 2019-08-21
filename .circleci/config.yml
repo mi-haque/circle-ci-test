@@ -83,10 +83,11 @@ workflows:
 
   deployment_pipeline:
     triggers:
-      filters:
-        branches:
-          only:
-            - develop
+      - schedule:
+          filters:
+            branches:
+              only:
+                - develop
     jobs:
       - unit_test
       - linting
