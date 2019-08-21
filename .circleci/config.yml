@@ -70,10 +70,9 @@ workflows:
   version: 2
 
   deployment_pipeline:
-    filters:
-      branches:
-        only:
-          - develop
+    branches:
+      only:
+        - develop
     jobs:
       - unit_test
       - linting
