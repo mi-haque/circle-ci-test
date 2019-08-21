@@ -82,12 +82,13 @@ workflows:
   version: 2
 
   deployment_pipeline:
+    triggers:
+      filters:
+        branches:
+          only:
+            - develop
     jobs:
-      - unit_test:
-          filters:
-            branches:
-              only:
-                - develop
+      - unit_test
       - linting
       - integration_test
       - build_artifacts:
