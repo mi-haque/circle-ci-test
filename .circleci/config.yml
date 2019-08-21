@@ -1,16 +1,16 @@
 version: 2
 
-executors:
-  busy_box_executor:
-    docker:
-      - image:   busybox:latest
-    working_directory:  ~/project
+#executors:
+#  busy_box_executor:
+#    docker:
+#      - image:   busybox:latest
+#    working_directory:  ~/project
 
 
 jobs:
   build:
-    executor:
-      - busy_box_executor
+    docker:
+        - image:   busybox:latest
     filters:
       branches:
         only:
@@ -22,7 +22,8 @@ jobs:
           command: echo "building..."
 
   unit_test:
-    executor: busy_box_executor
+    docker:
+      - image:   busybox:latest
     steps:
       - checkout
       -  run:
@@ -30,7 +31,8 @@ jobs:
             command: echo "unit testing"
 
   linting:
-    executor: busy_box_executor
+    docker:
+      - image:   busybox:latest
     steps:
       - checkout
       - run:
@@ -38,7 +40,8 @@ jobs:
           command: echo "linting & security checks happens here"
 
   integration_test:
-    executor: busy_box_executor
+    docker:
+      - image:   busybox:latest
     steps:
       - checkout
       - run:
@@ -46,7 +49,8 @@ jobs:
           command: echo "integration testing"
 
   build_artifacts:
-    executor: busy_box_executor
+    docker:
+      - image:   busybox:latest
     steps:
       - checkout
       - run:
@@ -55,7 +59,8 @@ jobs:
 
 
   deploy:
-    executor: busy_box_executor
+    docker:
+      - image:   busybox:latest
     steps:
       - checkout
       - run:
