@@ -26,11 +26,6 @@ jobs:
     docker:
       - image:   busybox:latest
 
-    filters:
-      branches:
-        only:
-          - develop
-
     steps:
       - checkout
       -  run:
@@ -88,7 +83,11 @@ workflows:
 
   deployment_pipeline:
     jobs:
-      - unit_test
+      - unit_test:
+          filters:
+            branches:
+              only:
+                - develop
       - linting
       - integration_test
       - build_artifacts:
