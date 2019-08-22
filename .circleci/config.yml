@@ -1,14 +1,5 @@
 version: 2
-
-#executors:
-#  busy_box_executor:
-#    docker:
-#      - image:   busybox:latest
-#    working_directory:  ~/project
-
-
 jobs:
-
   unit_test:
     docker:
       - image:   busybox:latest
