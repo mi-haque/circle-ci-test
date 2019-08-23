@@ -5,7 +5,7 @@ version: 2
 references:
   container_config: &container_config
     docker:
-      - image: busybox:latest
+      - image: circleci/python:3.7.4-stretch
     working_directory: /root/circle-ci-test
 
   restore_repo: &restore_repo
@@ -47,9 +47,11 @@ jobs:
     steps:
       - *restore_repo
       - *restore_dependecies
-      -  run:
+      - run:
             name: unit tests
-            command: pytest
+            command: |
+              . venv/bin/activate
+              pytest
 
   linting:
     <<: *container_config
@@ -58,7 +60,9 @@ jobs:
       - *restore_dependecies
       - run:
           name: linting checks
-          command: flake8
+          command: |
+            . venv/bin/activate
+            flake8
 
   integration_test:
     docker:
