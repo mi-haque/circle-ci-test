@@ -21,7 +21,8 @@ references:
 jobs:
 
   checkout_code:
-    <<: *container_config
+    docker:
+      - image: circleci/python:3.6.2-stretch-browsers
     steps:
       - *restore_repo
       - checkout
