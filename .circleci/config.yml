@@ -51,7 +51,7 @@ jobs:
             command: pytest
 
   linting:
-    d<<: *container_config
+    <<: *container_config
     steps:
       - *restore_repo
       - *restore_dependecies
