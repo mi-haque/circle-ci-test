@@ -106,7 +106,7 @@ workflows:
             - checkout
 
       - linting
-        requires:
+          requires:
             - checkout
 
       - integration_test
