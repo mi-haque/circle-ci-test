@@ -105,11 +105,11 @@ workflows:
           requires:
             - checkout
 
-      - linting
+      - linting:
           requires:
             - checkout
 
-      - integration_test
+      - integration_test:
           requires:
             - checkout
 
