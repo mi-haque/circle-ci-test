@@ -103,15 +103,15 @@ workflows:
     jobs:
       - unit_test:
           requires:
-            - checkout
+            - checkout_code
 
       - linting:
           requires:
-            - checkout
+            - checkout_code
 
       - integration_test:
           requires:
-            - checkout
+            - checkout_code
 
       - build_artifacts:
           requires:
