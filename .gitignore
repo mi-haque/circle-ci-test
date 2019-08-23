@@ -5,3 +5,4 @@
 dags/data_mart_jobs/__pycache__/*
 logs/
 dags/atomic_jobs/__pycache__/atomic_1.cpython-37.pyc
+tests/__pycache__/

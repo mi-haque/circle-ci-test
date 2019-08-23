@@ -31,7 +31,7 @@ SENSE = GoogleCloudStorageObjectSensor(
     google_cloud_conn_id=GCS_CONN,
 )
 
-PRINT  = BashOperator(
+PRINT = BashOperator(
     task_id='print',
     bash_command='echo "file arrived"',
     params={'my_param': 'dummy param'},

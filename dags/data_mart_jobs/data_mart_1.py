@@ -16,8 +16,8 @@ DEFAULT_ARGS = {
 DAG_NAME = "DATAMART_JOB"
 
 DAG_ID = DAG(dag_id=DAG_NAME,
-           default_args=DEFAULT_ARGS,
-           schedule_interval='@daily')
+             default_args=DEFAULT_ARGS,
+             schedule_interval='@daily')
 
 WAIT_FOR_ATOMIC_A1 = ExternalTaskSensor(
     task_id='wait_for_task',
