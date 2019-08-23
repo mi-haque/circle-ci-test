@@ -101,6 +101,7 @@ workflows:
 
   deployment_pipeline:
     jobs:
+      - checkout_code
       - unit_test:
           requires:
             - checkout_code
