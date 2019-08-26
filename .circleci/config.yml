@@ -28,7 +28,7 @@ jobs:
       - save_cache:
           key: v1-repo-{{ .Branch }}-{{ .Revision }}
           paths:
-            - ".git"
+            - .
       - *restore_dependecies
       - run: "echo 'insatlling python deps'"
 #      - run:
