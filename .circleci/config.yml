@@ -37,17 +37,17 @@ jobs:
           paths:
             - .
       - *restore_dependecies
-      - run:
-            name: Install Python deps in a venv
-            command: |
-              python3 -m venv venv
-              . venv/bin/activate
-              pip install -r requirements.txt
+      - run:  "echo 'installing deps'"
+#            name: Install Python deps in a venv
+#            command: |
+#              python3 -m venv venv
+#              . venv/bin/activate
+#              pip install -r requirements.txt
 
       - save_cache:
           key:  *deps-cache-key
           paths:
-            - ".venv"
+            - "venv"
 
   unit_test:
     <<: *container_config
@@ -67,6 +67,7 @@ jobs:
       - *restore_dependecies
       - run: "pwd"
       - run: "ls"
+      - run: "ls /home/circleci/circle-ci-test/venv"
       - run:
           name: linting checks
           command: |
