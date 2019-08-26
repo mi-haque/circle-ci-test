@@ -3,6 +3,13 @@
 version: 2
 
 references:
+
+  deps-cache-key: &deps-cache-key
+    v2-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+
+  repo-cache-key: &repo-cache-key
+    v1-repo-{{ .Branch }}-{{ .Revision }}
+
   container_config: &container_config
     docker:
       - image: circleci/python:3.7.4-stretch
@@ -11,12 +18,12 @@ references:
   restore_repo: &restore_repo
     restore_cache:
       keys:
-        - v1-repo-{{ .Branch }}-{{ .Revision }}
+        - *repo-cache-key
 
   restore_dependecies: &restore_dependecies
     restore_cache:
       keys:
-        - v2-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+        - *deps-cache-key
 
 jobs:
 
@@ -26,20 +33,19 @@ jobs:
       - *restore_repo
       - checkout
       - save_cache:
-          key: v1-repo-{{ .Branch }}-{{ .Revision }}
+          key: *repo-cache-key
           paths:
             - .
       - *restore_dependecies
-      - run: "echo 'insatlling python deps'"
-#      - run:
-#            name: Install Python deps in a venv
-#            command: |
-#              python3 -m venv venv
-#              . venv/bin/activate
-#              pip install -r requirements.txt
+      - run:
+            name: Install Python deps in a venv
+            command: |
+              python3 -m venv venv
+              . venv/bin/activate
+              pip install -r requirements.txt
 
       - save_cache:
-          key: v2-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+          key:  *deps-cache-key
           paths:
             - "venv"
 
