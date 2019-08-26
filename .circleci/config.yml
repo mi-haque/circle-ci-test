@@ -46,7 +46,7 @@ jobs:
   unit_test:
     <<: *container_config
     steps:
-      - *restore_repo
+#      - *restore_repo
       - *restore_dependecies
       - run:
             name: unit tests
