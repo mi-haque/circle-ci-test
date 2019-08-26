@@ -31,7 +31,7 @@ jobs:
           paths:
             - ".git"
       - *restore_dependecies
-      - run: "echo 'insatlling python deps''"
+      - run: "echo 'insatlling python deps'"
 #      - run:
 #            name: Install Python deps in a venv
 #            command: |
