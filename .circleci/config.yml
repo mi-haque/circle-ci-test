@@ -78,9 +78,6 @@ jobs:
     steps:
       - *restore_repo
       - *restore_dependecies
-      - run: "pwd"
-      - run: "ls"
-      - run: "ls /home/circleci/circle-ci-test/venv"
       - run:
           name: linting checks
           command: |
@@ -104,8 +101,6 @@ jobs:
       - run:
           name: build artifact
           command: echo "building artifacts"
-
-
   deploy:
     docker:
       - image:   busybox:latest
