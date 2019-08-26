@@ -5,7 +5,7 @@ version: 2
 references:
 
   deps-cache-key: &deps-cache-key
-    v5-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+    v6-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
   repo-cache-key: &repo-cache-key
     v1-repo-{{ .Branch }}-{{ .Revision }}
@@ -43,8 +43,8 @@ jobs:
               python3 -m venv venv
               . venv/bin/activate
               which python
-              pip install pytest
-#              pip install -r requirements.txt
+#              pip install pytest
+              pip install -r requirements.txt
 
       - save_cache:
           key:  *deps-cache-key
