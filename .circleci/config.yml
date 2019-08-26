@@ -5,7 +5,7 @@ version: 2
 references:
 
   deps-cache-key: &deps-cache-key
-    v3-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+    v4-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
 
   repo-cache-key: &repo-cache-key
     v1-repo-{{ .Branch }}-{{ .Revision }}
