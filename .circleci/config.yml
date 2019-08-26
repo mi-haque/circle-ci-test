@@ -42,15 +42,14 @@ jobs:
             command: |
               python3 -m venv venv
               . venv/bin/activate
-              which python
-              pip install -r requirements.txt
+              pip install tox
 
       - save_cache:
           key:  *deps-cache-key
           paths:
             - "venv"
 
-  unit_test:
+  unit_test_coverage_linting:
     <<: *container_config
     steps:
       - *restore_repo
@@ -59,7 +58,7 @@ jobs:
             name: unit tests
             command: |
               . venv/bin/activate
-              pytest
+              tox
 
   linting:
     <<: *container_config
@@ -118,23 +117,13 @@ workflows:
   deployment_pipeline:
     jobs:
       - checkout_code
-      - unit_test:
-          requires:
-            - checkout_code
-
-      - linting:
-          requires:
-            - checkout_code
-
-      - integration_test:
+      - unit_test_coverage_linting:
           requires:
             - checkout_code
 
       - build_artifacts:
           requires:
-            - linting
-            - unit_test
-            - integration_test
+            - unit_test_coverage_linting
 
       - wait_for_approval:
           type: approval

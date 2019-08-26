@@ -1,11 +1,13 @@
 import unittest
 from airflow.models import DagBag
+from airflow.models import Variable
 
 
 class TestAtomicDag(unittest.TestCase):
 
     def setUp(self):
-        self.dagbag = DagBag()
+        variable = Variable()
+        self.dagbag = DagBag(dag_folder=variable.get('dags_folder'))
 
     def test_atomic_jobs(self):
         dag_id = 'ATOMIC_JOB'
