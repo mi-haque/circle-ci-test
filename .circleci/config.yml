@@ -133,6 +133,10 @@ workflows:
       - unit_test_coverage_linting:
           requires:
             - checkout_code
+          filters:
+            branches:
+              only:
+                - master
 
       - build_artifacts:
           requires:
