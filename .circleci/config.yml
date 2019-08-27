@@ -133,7 +133,7 @@ workflows:
           filters:
               branches:
                 only:
-                  - master
+                  - tox
       - unit_test_coverage_linting:
           requires:
             - checkout_code
