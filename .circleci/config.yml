@@ -1,6 +1,6 @@
 
 
-version: 2
+version: 2.1
 
 references:
 
@@ -125,15 +125,16 @@ jobs:
       - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
 
 workflows:
-  version: 2
+  version: 2.1
 
-  deployment_pipeline:
+  deployment_pipeline_prod:
     jobs:
       - checkout_code:
 
       - unit_test_coverage_linting:
           requires:
             - checkout_code
+            -
       - build_artifacts:
           requires:
             - unit_test_coverage_linting
@@ -149,3 +150,22 @@ workflows:
             branches:
               only:
                 - master
+
+    deployment_pipeline_dev:
+      jobs:
+        - checkout_code
+        - unit_test_coverage_linting:
+            requires:
+              - checkout_code
+        - build_artifacts:
+            requires:
+              - unit_test_coverage_linting
+
+        - wait_for_approval:
+            type: approval
+            requires:
+              - build_artifacts
+        - deploy:
+            requires:
+              - wait_for_approval
+
