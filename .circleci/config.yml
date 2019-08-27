@@ -129,15 +129,14 @@ workflows:
 
   deployment_pipeline:
     jobs:
-      - checkout_code
+      - checkout_code:
+          filters:
+              branches:
+                only:
+                  - master
       - unit_test_coverage_linting:
           requires:
             - checkout_code
-          filters:
-            branches:
-              only:
-                - master
-
       - build_artifacts:
           requires:
             - unit_test_coverage_linting
