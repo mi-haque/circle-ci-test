@@ -129,11 +129,8 @@ workflows:
 
   deployment_pipeline:
     jobs:
-      - checkout_code:
-          filters:
-              branches:
-                only:
-                  - tox
+      - checkout_code
+
       - unit_test_coverage_linting:
           requires:
             - checkout_code
