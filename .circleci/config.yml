@@ -1,7 +1,8 @@
 
-
+# Version of the circle CI configuration
 version: 2.1
 
+# Re-usable variables and map secetion
 references:
 
   deps-cache-key: &deps-cache-key
@@ -14,9 +15,9 @@ references:
     v1-tox-{{ .Branch }}-{{ checksum "tox.ini" }}
 
   container_config: &container_config
-    docker:
-      - image: circleci/python:3.7.4-stretch
-    working_directory: ~/circle-ci-test
+    docker: # executor type: docker
+      - image: circleci/python:3.7.4-stretch  # docker image name
+    working_directory: ~/circle-ci-test   # working directory for our pipeline
 
   restore_repo: &restore_repo
     restore_cache:
@@ -33,26 +34,27 @@ references:
       keys:
         - *tox-cache-key
 
+# here we mention all the jobs needed for our pipeline
 jobs:
 
-  checkout_code:
+  checkout_code: # name of the job
     <<: *container_config
     steps:
-      - *restore_repo
-      - checkout
-      - save_cache:
+      - *restore_repo # restoring cached repository if there no change in the current github branch
+      - checkout  # pre-build checkout step
+      - save_cache: # saving cache to the repository cache, only if any changes are implemented
           key: *repo-cache-key
           paths:
             - .
-      - *restore_dependecies
-      - run:
-            name: Install Python deps in a venv
-            command: |
+      - *restore_dependecies  # restoring dependencies
+      - run:  # in run step we can mention actions need to be performed inside this job
+            name: Install Python deps in a venv # name of the run step
+            command: |  # commands...here we can add those actions
               python3 -m venv venv
               . venv/bin/activate
               pip install tox
 
-      - save_cache:
+      - save_cache: # saving dependec cache
           key:  *deps-cache-key
           paths:
             - "venv"
@@ -124,14 +126,16 @@ jobs:
       - run: git clone https://github.com/mi-haque/circle-ci-test.git
       - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
 
-workflows:
-  version: 2.1
+workflows:  # in this section we can decide the flow our workflow. including parallel, sequential steps, dependencies
+            # etc ..
+  version: 2.1  # version of the workflows configuration
 
   deployment_pipeline_prod:
     jobs:
       - checkout_code
       - unit_test_coverage_linting:
-          requires:
+          requires: # adding dependencies with other jobs. here we can specify the current job is dependent or not with
+                    # any other jobs
             - checkout_code
       - build_artifacts:
           requires:
