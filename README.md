@@ -1,4 +1,5 @@
 # circle-ci-test
 repo to test circle ci 
 
-![CircleCI](https://img.shields.io/circleci/build/github/mi-haque/circle-ci-test/tox?logo=CircleCI)
+[![CircleCI](https://circleci.com/gh/mi-haque/circle-ci-test.svg?style=svg)](https://circleci.com/gh/mi-haque/circle-ci-test)
+
