@@ -1,0 +1,77 @@
+version: 2
+jobs:
+  unit_test:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      -  run:
+            name: unit tests
+            command: echo "unit testing"
+
+  linting:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: linting checks
+          command: echo "linting & security checks happens here"
+
+  integration_test:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: integration test
+          command: echo "integration testing"
+
+  build_artifacts:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: build artifact
+          command: echo "building artifacts"
+
+
+  deploy:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: integration test
+          command: echo "integration testing"
+
+  rsync:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - run: echo $DEV_PROJECT_KEY | gcloud auth activate-service-account --key-file=-
+      - run: gsutil ls gs://circleci_input
+      - run: git clone https://github.com/mi-haque/circle-ci-test.git
+      - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
+
+workflows:
+  version: 2
+
+  deployment_pipeline:
+    jobs:
+      - unit_test
+      - linting
+      - integration_test
+      - build_artifacts:
+          requires:
+            - linting
+            - unit_test
+            - integration_test
+      - wait_for_approval:
+          type: approval
+          requires:
+              - build_artifacts
+      - deploy:
+          requires:
+            - wait_for_approval

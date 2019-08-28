@@ -1,39 +1,99 @@
-version: 2
 
-executors:
-  busy_box_executor:
-    docker:
-      - image:   busybox:latest
-    working_directory:  ~/project
+# Version of the circle CI configuration
+version: 2.1
 
+# Re-usable variables and map secetion
+references:
 
+  deps-cache-key: &deps-cache-key
+    v6-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+
+  repo-cache-key: &repo-cache-key
+    v1-repo-{{ .Branch }}-{{ .Revision }}
+
+  tox-cache-key: &tox-cache-key
+    v1-tox-{{ .Branch }}-{{ checksum "tox.ini" }}
+
+  container_config: &container_config
+    docker: # executor type: docker
+      - image: circleci/python:3.7.4-stretch  # docker image name
+    working_directory: ~/circle-ci-test   # working directory for our pipeline
+
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - *repo-cache-key
+
+  restore_dependecies: &restore_dependecies
+    restore_cache:
+      keys:
+        - *deps-cache-key
+
+  restore_tox_cache: &restore_tox_cache
+    restore_cache:
+      keys:
+        - *tox-cache-key
+
+# here we mention all the jobs needed for our pipeline
 jobs:
-  build:
-    executor: busy_box_executor
-    steps:
-      - checkout
-      - run:
-          name: build repo
-          command: echo "building..."
 
-  unit_test:
-    executor: busy_box_executor
+  checkout_code: # name of the job
+    <<: *container_config
     steps:
-      - checkout
-      -  run:
+      - *restore_repo # restoring cached repository if there no change in the current github branch
+      - checkout  # pre-build checkout step
+      - save_cache: # saving cache to the repository cache, only if any changes are implemented
+          key: *repo-cache-key
+          paths:
+            - .
+      - *restore_dependecies  # restoring dependencies
+      - run:  # in run step we can mention actions need to be performed inside this job
+            name: Install Python deps in a venv # name of the run step
+            command: |  # commands...here we can add those actions
+              python3 -m venv venv
+              . venv/bin/activate
+              pip install tox
+
+      - save_cache: # saving dependec cache
+          key:  *deps-cache-key
+          paths:
+            - "venv"
+
+  unit_test_coverage_linting:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_dependecies
+      - *restore_tox_cache
+      - run:
             name: unit tests
-            command: echo "unit testing"
+            command: |
+              . venv/bin/activate
+              tox
+      - save_cache:
+            key:  *tox-cache-key
+            paths:
+              - ".tox"
+      - store_test_results:
+          path: test-reports
+
+      - store_artifacts:
+          path: test-reports
 
   linting:
-    executor: busy_box_executor
+    <<: *container_config
     steps:
-      - checkout
+      - *restore_repo
+      - *restore_dependecies
       - run:
           name: linting checks
-          command: echo "linting & security checks happens here"
+          command: |
+            . venv/bin/activate
+            flake8
 
   integration_test:
-    executor: busy_box_executor
+    docker:
+      - image:   busybox:latest
     steps:
       - checkout
       - run:
@@ -41,16 +101,16 @@ jobs:
           command: echo "integration testing"
 
   build_artifacts:
-    executor: busy_box_executor
+    docker:
+      - image:   busybox:latest
     steps:
       - checkout
       - run:
           name: build artifact
           command: echo "building artifacts"
-
-
   deploy:
-    executor: busy_box_executor
+    docker:
+      - image:   busybox:latest
     steps:
       - checkout
       - run:
@@ -66,22 +126,21 @@ jobs:
       - run: git clone https://github.com/mi-haque/circle-ci-test.git
       - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
 
-workflows:
-  version: 2
+workflows:  # in this section we can decide the flow our workflow. including parallel, sequential steps, dependencies
+            # etc ..
+  version: 2.1  # version of the workflows configuration
 
-  deployment_pipeline:
-    branches:
-      only:
-        - develop
+  deployment_pipeline_prod:
     jobs:
-      - unit_test
-      - linting
-      - integration_test
+      - checkout_code
+      - unit_test_coverage_linting:
+          requires: # adding dependencies with other jobs. here we can specify the current job is dependent or not with
+                    # any other jobs
+            - checkout_code
       - build_artifacts:
           requires:
-            - linting
-            - unit_test
-            - integration_test
+            - unit_test_coverage_linting
+
       - wait_for_approval:
           type: approval
           requires:
