@@ -1,6 +1,16 @@
 # Version of the circle CI configuration
 version: 2.1
 
+commands:
+  set_env:
+    description: "Setting environment variables based on the branch"
+    setps:
+      - run: echo "its' in development"
+    when:
+      condition: $CIRCLE_BRANCH == "master"
+
+
+
 # Re-usable variables and map secetion
 references:
 
@@ -46,6 +56,7 @@ jobs:
     steps:
       - *restore_repo # restoring cached repository if there no change in the current github branch
       - checkout  # pre-build checkout step
+      - set_env
       - save_cache: # saving cache to the repository cache, only if any changes are implemented
           key: *repo-cache-key
           paths:
