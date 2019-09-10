@@ -12,6 +12,7 @@ commands:
                   export CLOUDSDK_CORE_PROJECT=UAT
                 else
                   export CLOUDSDK_CORE_PROJECT=DEV
+                fi
       - run: echo $CLOUDSDK_CORE_PROJECT
 
 
