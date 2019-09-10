@@ -9,7 +9,7 @@ commands:
       - when:
           condition: $CIRCLE_BRANCH == "develop"
           steps:
-            - run: echo "preinstall"
+            - run: echo $CIRCLE_BRANCH
 
 
 
