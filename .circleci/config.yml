@@ -12,7 +12,7 @@ commands:
                   export CLOUDSDK_CORE_PROJECT=UAT
                 else
                   export CLOUDSDK_CORE_PROJECT=DEV
-     - run: echo $CLOUDSDK_CORE_PROJECT
+      - run: echo $CLOUDSDK_CORE_PROJECT
 
 
 # Re-usable variables and map secetion
