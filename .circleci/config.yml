@@ -138,6 +138,8 @@ workflows:  # in this section we can decide the flow our workflow. including par
   deployment_pipeline_prod:
     jobs:
       - checkout_code:
+          my_name: haquq
+          
           filters:
             branches:
               only:
