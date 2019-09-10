@@ -39,7 +39,7 @@ jobs:
   checkout_code: # name of the job
     <<: *container_config
     parameters:
-      name:
+      my_name:
         description: "test"
         type: string
         default: mih
@@ -51,7 +51,7 @@ jobs:
           paths:
             - .
       - *restore_dependecies  # restoring dependencies
-      - run: echo << parameters.name >>
+      - run: echo << parameters.my_name >>
       - run:  # in run step we can mention actions need to be performed inside this job
             name: Install Python deps in a venv # name of the run step
             command: |  # commands...here we can add those actions
