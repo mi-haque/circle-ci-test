@@ -5,12 +5,14 @@ commands:
   set_env:
     description: "Setting environment variables based on the branch"
     steps:
-      - run: echo "its' in development"
-      - when:
-          condition: false
-          steps:
-            - run: echo $CIRCLE_BRANCH
-
+      - run: |
+                if [ "$CIRCLE_BRANCH" == "master" ]; then 
+                  export CLOUDSDK_CORE_PROJECT=PROD
+                elif [ "$CIRCLE_BRANCH" == "uat" ]; then 
+                  export CLOUDSDK_CORE_PROJECT=UAT
+                else
+                  export CLOUDSDK_CORE_PROJECT=DEV
+     - run: echo $CLOUDSDK_CORE_PROJECT
 
 
 # Re-usable variables and map secetion
