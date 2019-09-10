@@ -6,9 +6,9 @@ commands:
     description: "Setting environment variables based on the branch"
     steps:
       - run: echo "its' in development"
-      when:
-        condition: $CIRCLE_BRANCH == "master"
-        steps:
+      - when:
+          condition: $CIRCLE_BRANCH == "master"
+          steps:
             - run: echo "preinstall"
 
 
