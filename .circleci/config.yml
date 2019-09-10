@@ -15,6 +15,7 @@ commands:
                 else
                   export CLOUDSDK_CORE_PROJECT=DEV
                 fi
+                echo $CLOUDSDK_CORE_PROJECT
       - run: echo $CLOUDSDK_CORE_PROJECT
 
 
