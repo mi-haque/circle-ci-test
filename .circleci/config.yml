@@ -16,7 +16,7 @@ commands:
                   export CLOUDSDK_CORE_PROJECT=DEV
                 fi
                 echo $CLOUDSDK_CORE_PROJECT
-      - run: echo $CLOUDSDK_CORE_PROJECT
+      - run: echo ${CLOUDSDK_CORE_PROJECT}
 
 
 # Re-usable variables and map secetion
