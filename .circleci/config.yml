@@ -4,10 +4,12 @@ version: 2.1
 commands:
   set_env:
     description: "Setting environment variables based on the branch"
-    setps:
+    steps:
       - run: echo "its' in development"
-    when:
-      condition: $CIRCLE_BRANCH == "master"
+      when:
+        condition: $CIRCLE_BRANCH == "master"
+        steps:
+            - run: echo "preinstall"
 
 
 
