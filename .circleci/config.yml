@@ -5,7 +5,8 @@ commands:
   set_env:
     description: "Setting environment variables based on the branch"
     steps:
-      - run: |
+      - run: 
+          command: |
                 if [ "$CIRCLE_BRANCH" == "master" ]; then 
                   export CLOUDSDK_CORE_PROJECT=PROD
                 elif [ "$CIRCLE_BRANCH" == "uat" ]; then 
