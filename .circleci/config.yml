@@ -42,7 +42,7 @@ jobs:
       my_name:
         description: "test"
         type: string
-        default: mih
+        default: my name is mih
     steps:
       - *restore_repo # restoring cached repository if there no change in the current github branch
       - checkout  # pre-build checkout step
