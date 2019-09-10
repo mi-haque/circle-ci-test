@@ -7,7 +7,7 @@ commands:
     steps:
       - run: echo "its' in development"
       - when:
-          condition: $CIRCLE_BRANCH == "master"
+          condition: $CIRCLE_BRANCH == "develop"
           steps:
             - run: echo "preinstall"
 
