@@ -9,11 +9,11 @@ commands:
       - run: 
           command: |
                 if [ "$CIRCLE_BRANCH" == "master" ]; then 
-                  export CLOUDSDK_CORE_PROJECT=PROD
+                  echo 'export CLOUDSDK_CORE_PROJECT=PROD' >> $BASH_ENV
                 elif [ "$CIRCLE_BRANCH" == "uat" ]; then 
-                  export CLOUDSDK_CORE_PROJECT=UAT
+                  echo 'export CLOUDSDK_CORE_PROJECT=UAT' >> $BASH_ENV
                 else
-                  export CLOUDSDK_CORE_PROJECT=DEV
+                  echo 'export CLOUDSDK_CORE_PROJECT=DEV' >> $BASH_ENV
                 fi
                 echo $CLOUDSDK_CORE_PROJECT
       - run: echo ${CLOUDSDK_CORE_PROJECT}
