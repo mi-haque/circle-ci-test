@@ -15,7 +15,7 @@ commands:
                 else
                   echo 'export CLOUDSDK_CORE_PROJECT=DEV' >> $BASH_ENV
                 fi
-                echo $CLOUDSDK_CORE_PROJECT
+                echo ${CLOUDSDK_CORE_PROJECT}
       - run: echo ${CLOUDSDK_CORE_PROJECT}
 
 
@@ -89,6 +89,7 @@ jobs:
       - *restore_repo
       - *restore_dependecies
       - *restore_tox_cache
+      - run: echo ${CLOUDSDK_CORE_PROJECT}
       - run:
             name: unit tests
             command: |
