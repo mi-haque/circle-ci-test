@@ -70,7 +70,7 @@ jobs:
           paths:
             - .
       - *restore_dependecies  # restoring dependencies
-      - run: echo << parameters.my_name >>
+      - run: echo ${<< parameters.my_name >>}
       - run:  # in run step we can mention actions need to be performed inside this job
             name: Install Python deps in a venv # name of the run step
             command: |  # commands...here we can add those actions
@@ -158,7 +158,7 @@ workflows:  # in this section we can decide the flow our workflow. including par
   deployment_pipeline_prod:
     jobs:
       - checkout_code:
-          my_name: haquq
+          my_name: DEV_PROJECT_KEY
           
           filters:
             branches:
