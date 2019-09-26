@@ -2,6 +2,16 @@
 version: 2.1
 
 commands:
+
+  say_hello:
+    parameters:
+      my_name:
+        type: string
+
+    steps:
+      - run: echo "my name is << parameters.my_name >>"
+
+
   set_env:
     description: "Setting environment variables based on the branch"
     steps:
@@ -56,21 +66,25 @@ jobs:
 
   checkout_code: # name of the job
     <<: *container_config
+
     parameters:
-      my_name:
-        description: "test"
+      param_name:
         type: string
-        default: my name is /mih
+        default: haq
+
+
     steps:
       - *restore_repo # restoring cached repository if there no change in the current github branch
       - checkout  # pre-build checkout step
       - set_env
+      - say_hello:
+            my_name: << parameters.param_name >>
+
       - save_cache: # saving cache to the repository cache, only if any changes are implemented
           key: *repo-cache-key
           paths:
             - .
       - *restore_dependecies  # restoring dependencies
-      - run: echo << parameters.my_name >>
       - run:  # in run step we can mention actions need to be performed inside this job
             name: Install Python deps in a venv # name of the run step
             command: |  # commands...here we can add those actions
@@ -158,7 +172,7 @@ workflows:  # in this section we can decide the flow our workflow. including par
   deployment_pipeline_prod:
     jobs:
       - checkout_code:
-           # my_name: ${DEV_PROJECT_KEY}
+          param_name: ${DEV_PROJECT_KEY}
           
           filters:
             branches:
