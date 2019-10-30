@@ -1,0 +1,8 @@
+apache-airflow[gcp_api,password,crypto]==1.10.2
+tenacity==5.0.4
+
+pytest==5.1.1
+pytest-cov==2.7.1
+
+flake8==3.7.8
+

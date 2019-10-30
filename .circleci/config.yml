@@ -1,0 +1,145 @@
+
+
+version: 2
+
+references:
+
+  deps-cache-key: &deps-cache-key
+    v6-deps-{{ .Branch }}-{{ checksum "requirements.txt" }}
+
+  repo-cache-key: &repo-cache-key
+    v1-repo-{{ .Branch }}-{{ .Revision }}
+
+  container_config: &container_config
+    docker:
+      - image: circleci/python:3.7.4-stretch
+    working_directory: ~/circle-ci-test
+
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - *repo-cache-key
+
+  restore_dependecies: &restore_dependecies
+    restore_cache:
+      keys:
+        - *deps-cache-key
+
+jobs:
+
+  checkout_code:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - checkout
+      - save_cache:
+          key: *repo-cache-key
+          paths:
+            - .
+      - *restore_dependecies
+      - run:
+            name: Install Python deps in a venv
+            command: |
+              python3 -m venv venv
+              . venv/bin/activate
+              which python
+              pip install -r requirements.txt
+
+      - save_cache:
+          key:  *deps-cache-key
+          paths:
+            - "venv"
+
+  unit_test:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_dependecies
+      - run:
+            name: unit tests
+            command: |
+              . venv/bin/activate
+              pytest
+
+  linting:
+    <<: *container_config
+    steps:
+      - *restore_repo
+      - *restore_dependecies
+      - run: "pwd"
+      - run: "ls"
+      - run: "ls /home/circleci/circle-ci-test/venv"
+      - run:
+          name: linting checks
+          command: |
+            . venv/bin/activate
+            flake8
+
+  integration_test:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: integration test
+          command: echo "integration testing"
+
+  build_artifacts:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: build artifact
+          command: echo "building artifacts"
+
+
+  deploy:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - checkout
+      - run:
+          name: integration test
+          command: echo "integration testing"
+
+  rsync:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - run: echo $DEV_PROJECT_KEY | gcloud auth activate-service-account --key-file=-
+      - run: gsutil ls gs://circleci_input
+      - run: git clone https://github.com/mi-haque/circle-ci-test.git
+      - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
+
+workflows:
+  version: 2
+
+  deployment_pipeline:
+    jobs:
+      - checkout_code
+      - unit_test:
+          requires:
+            - checkout_code
+
+      - linting:
+          requires:
+            - checkout_code
+
+      - integration_test:
+          requires:
+            - checkout_code
+
+      - build_artifacts:
+          requires:
+            - linting
+            - unit_test
+            
+
+      - wait_for_approval:
+          type: approval
+          requires:
+              - build_artifacts
+      - deploy:
+          requires:
+            - wait_for_approval
