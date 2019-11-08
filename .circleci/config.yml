@@ -151,31 +151,24 @@ jobs:
       - run: git clone https://github.com/mi-haque/circle-ci-test.git
       - run: gsutil rsync -r -d -x ".git/*" circle-ci-test/ gs://circleci_input
 
+  say_hello:
+    docker:
+      - image:   busybox:latest
+    steps:
+      - run: |
+          echo released
+
+
+
+
 workflows:  # in this section we can decide the flow our workflow. including parallel, sequential steps, dependencies
             # etc ..
   version: 2.1  # version of the workflows configuration
 
-  deployment_pipeline_prod:
+  release_check:
     jobs:
-      - checkout_code:
-           # my_name: ${DEV_PROJECT_KEY}
-          
-          filters:
-            branches:
-              only:
-                - master
-      - unit_test_coverage_linting:
-          requires: # adding dependencies with other jobs. here we can specify the current job is dependent or not with
-                    # any other jobs
-            - checkout_code
-      - build_artifacts:
-          requires:
-            - unit_test_coverage_linting
+      - say_hello
+      filters:
+        tags:
+          only: /v.*/
 
-      - wait_for_approval:
-          type: approval
-          requires:
-              - build_artifacts
-      - deploy:
-          requires:
-            - wait_for_approval
