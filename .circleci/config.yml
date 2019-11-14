@@ -164,11 +164,10 @@ jobs:
 workflows:  # in this section we can decide the flow our workflow. including parallel, sequential steps, dependencies
             # etc ..
   version: 2.1  # version of the workflows configuration
-
   release_check:
     jobs:
-      - say_hello
-      filters:
-        tags:
-          only: /v.*/
+      - say_hello:
+        filters:
+            tags:
+              only: /^v\d+(\.\d+){2}(-.*)?$/
 
