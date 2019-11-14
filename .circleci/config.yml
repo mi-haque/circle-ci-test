@@ -160,21 +160,33 @@ workflows:  # in this section we can decide the flow our workflow. including par
       - checkout_code:
           filters:
             tags:
-              only: config-test
+              only: /^prod.*/
             branches:
               ignore: /.*/
       - unit_test_coverage_linting:
           requires: # adding dependencies with other jobs. here we can specify the current job is dependent or not with
                     # any other jobs
             - checkout_code
+          filters:
+            tags:
+              only: /^prod.*/
       - build_artifacts:
           requires:
             - unit_test_coverage_linting
+          filters:
+            tags:
+              only: /^prod.*/
 
       - wait_for_approval:
           type: approval
           requires:
               - build_artifacts
+          filters:
+            tags:
+              only: /^prod.*/
       - deploy:
           requires:
             - wait_for_approval
+          filters:
+            tags:
+              only: /^prod.*/
