@@ -169,5 +169,5 @@ workflows:  # in this section we can decide the flow our workflow. including par
       - say_hello:
         filters:
             tags:
-              only: /^v\d+(\.\d+){2}(-.*)?$/
+              only: v*.*
 
