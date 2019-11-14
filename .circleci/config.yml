@@ -167,7 +167,7 @@ workflows:  # in this section we can decide the flow our workflow. including par
   release_check:
     jobs:
       - say_hello:
-        filters:
-            tags:
-              only: v*.*
+#        filters:
+#            tags:
+#              only: v*.*
 
