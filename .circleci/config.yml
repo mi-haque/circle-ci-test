@@ -166,7 +166,7 @@ workflows:  # in this section we can decide the flow our workflow. including par
   version: 2.1  # version of the workflows configuration
   release_check:
     jobs:
-      - say_hello:
+      - say_hello
 #        filters:
 #            tags:
 #              only: v*.*
