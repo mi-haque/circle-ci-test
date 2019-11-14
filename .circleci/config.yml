@@ -159,9 +159,9 @@ workflows:  # in this section we can decide the flow our workflow. including par
     jobs:
       - checkout_code:
           filters:
-            branches:
+            tags:
               only:
-                - master
+                - v*.*
       - unit_test_coverage_linting:
           requires: # adding dependencies with other jobs. here we can specify the current job is dependent or not with
                     # any other jobs
