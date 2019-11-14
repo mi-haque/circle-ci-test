@@ -160,7 +160,9 @@ workflows:  # in this section we can decide the flow our workflow. including par
       - checkout_code:
           filters:
             tags:
-              only: v1.2.3
+              only: /^config-test.*/
+            branches:
+              ignore: /.*/
       - unit_test_coverage_linting:
           requires: # adding dependencies with other jobs. here we can specify the current job is dependent or not with
                     # any other jobs
