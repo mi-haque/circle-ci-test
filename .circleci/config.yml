@@ -160,7 +160,7 @@ workflows:  # in this section we can decide the flow our workflow. including par
       - checkout_code:
           filters:
             tags:
-              only: /^config-test.*/
+              only: config-test.*
             branches:
               ignore: /.*/
       - unit_test_coverage_linting:
