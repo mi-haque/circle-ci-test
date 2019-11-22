@@ -184,9 +184,9 @@ workflows:  # in this section we can decide the flow our workflow. including par
           filters:
             tags:
               only: /^prod.*/
-      - deploy:
-          requires:
-            - wait_for_approval
-          filters:
-            tags:
-              only: /^prod.*/
+#       - deploy:
+#           requires:
+#             - wait_for_approval
+#           filters:
+#             tags:
+#               only: /^prod.*/
