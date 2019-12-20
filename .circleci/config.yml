@@ -160,8 +160,7 @@ workflows:  # in this section we can decide the flow our workflow. including par
       - checkout_code:
           filters:
             tags:
-              only: 
-                - /^v[1-9].*
+              only: /^v[1-9].*
             branches:
               ignore: master
       - unit_test_coverage_linting:
@@ -170,13 +169,13 @@ workflows:  # in this section we can decide the flow our workflow. including par
             - checkout_code
           filters:
             tags:
-              only: /^prod.*/
+              only: /^v[1-9].*
       - build_artifacts:
           requires:
             - unit_test_coverage_linting
           filters:
             tags:
-              only: /^prod.*/
+              only: /^v[1-9].*
 
       - wait_for_approval:
           type: approval
@@ -184,10 +183,10 @@ workflows:  # in this section we can decide the flow our workflow. including par
               - build_artifacts
           filters:
             tags:
-              only: /^prod.*/
+              only: /^v[1-9].*
       - deploy:
           requires:
             - wait_for_approval
           filters:
             tags:
-              only: /^prod.*/
+              only: /^v[1-9].*
