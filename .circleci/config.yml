@@ -162,7 +162,7 @@ workflows:  # in this section we can decide the flow our workflow. including par
             tags:
               only: /^prod.*/
             branches:
-              ignore: /.*/
+              ignore: master
       - unit_test_coverage_linting:
           requires: # adding dependencies with other jobs. here we can specify the current job is dependent or not with
                     # any other jobs
