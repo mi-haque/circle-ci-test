@@ -180,6 +180,7 @@ workflows:  # in this section we can decide the flow our workflow. including par
       - wait_for_approval:
           type: approval
           requires:
+          
               - build_artifacts
           filters:
             tags:
